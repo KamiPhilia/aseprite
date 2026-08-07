@@ -10,22 +10,20 @@ jobs:
       with:
         submodules: 'recursive'
 
-    # Se configura explícitamente para compilar en arquitectura x86 (32 bits)
+    # Corrección: Se fuerza la versión compatible de MSVC
     - name: Configurar herramientas de desarrollo x86
-      uses: ilammy/msvc-dev-cmd@v1
+      uses: ilammy/msvc-dev-cmd@v1.13.0
       with:
         arch: x86
 
     - name: Instalar Ninja y CMake
       run: choco install ninja cmake
 
-    # Descarga la versión de Skia para 32 bits (Windows-Release-x86)
     - name: Descargar precompilado de Skia 32 bits
       run: |
         curl -L -o skia.zip https://github.com
         expand-archive skia.zip -DestinationPath c:\skia
 
-    # Compila apuntando a las carpetas x86 de Skia
     - name: Compilar Aseprite x86
       run: |
         mkdir build
@@ -33,8 +31,9 @@ jobs:
         cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo -DLAF_BACKEND=skia -DSKIA_DIR=c:\skia -DSKIA_LIBRARY_DIR=c:\skia\out\Release-x86 -G Ninja ..
         ninja aseprite
 
+    # Corrección: Versión actualizada del cargador de archivos
     - name: Subir archivo final 32 bits
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v4.6.0
       with:
         name: Aseprite-Windows-32bit-Listo
         path: build/bin/
