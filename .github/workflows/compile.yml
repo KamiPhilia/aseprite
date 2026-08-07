@@ -5,7 +5,6 @@ jobs:
   build:
     runs-on: windows-latest
     steps:
-    # CORRECCIÓN DEFINITIVA: Clonación manual para saltarnos el limpiador de GitHub
     - name: Descargar codigo fuente manualmente
       run: git clone https://github.com/aseprite/aseprite.git .
 
@@ -26,7 +25,8 @@ jobs:
       run: |
         mkdir build
         cd build
-        cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo -A Win32 -DLAF_BACKEND=skia -DSKIA_DIR=c:\skia -DSKIA_LIBRARY_DIR=c:\skia\out\Release-x86 -G Ninja ..
+        # CORRECCIÓN: Se eliminó "-A Win32" porque Ninja ya sabe que es x86 gracias al paso de arriba
+        cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo -DLAF_BACKEND=skia -DSKIA_DIR=c:\skia -DSKIA_LIBRARY_DIR=c:\skia\out\Release-x86 -G Ninja ..
         ninja aseprite
 
     - name: Subir archivo final 32 bits
