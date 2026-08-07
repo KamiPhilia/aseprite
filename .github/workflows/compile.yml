@@ -1,17 +1,19 @@
 name: Compilar Aseprite para Windows 32 bits
 on: [workflow_dispatch]
 
+# Fuerza el entorno a ignorar la política de bloqueo de Node
+env:
+  ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION: 'true'
+
 jobs:
   build:
     runs-on: windows-latest
     steps:
-    # Corrección: Se actualiza a la versión v4.2.2 compatible con Node 24
     - name: Descargar codigo fuente
-      uses: actions/checkout@v4.2.2
+      uses: actions/checkout@v4
       with:
         submodules: 'recursive'
 
-    # Corrección: Se actualiza a la versión v1.14.1 compatible con Node 24
     - name: Configurar herramientas de desarrollo x86
       uses: ilammy/msvc-dev-cmd@v1
       with:
@@ -23,7 +25,6 @@ jobs:
     - name: Descargar precompilado de Skia 32 bits
       run: |
         curl -L -o skia.zip https://github.com/aseprite/skia/releases/download/m102-861e4743af/Skia-Windows-Release-x86.zip
-
         expand-archive skia.zip -DestinationPath c:\skia
 
     - name: Compilar Aseprite x86
@@ -34,7 +35,7 @@ jobs:
         ninja aseprite
 
     - name: Subir archivo final 32 bits
-      uses: actions/upload-artifact@v4.6.0
+      uses: actions/upload-artifact@v4
       with:
         name: Aseprite-Windows-32bit-Listo
         path: build/bin/
