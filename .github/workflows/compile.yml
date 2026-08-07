@@ -13,7 +13,7 @@ jobs:
 
     # Corrección: Se actualiza a la versión v1.14.1 compatible con Node 24
     - name: Configurar herramientas de desarrollo x86
-      uses: ilammy/msvc-dev-cmd@v1.14.1
+      uses: ilammy/msvc-dev-cmd@v1
       with:
         arch: x86
 
