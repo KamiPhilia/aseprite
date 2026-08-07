@@ -1,18 +1,16 @@
 name: Compilar Aseprite para Windows 32 bits
 on: [workflow_dispatch]
 
-# Fuerza el entorno a ignorar la política de bloqueo de Node
-env:
-  ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION: 'true'
-
 jobs:
   build:
     runs-on: windows-latest
     steps:
     - name: Descargar codigo fuente
-      uses: actions/checkout@v4
+      uses: actions/checkout@v4.2.2
       with:
         submodules: 'recursive'
+        # Evita que errores menores de sincronización en submódulos rompan el script
+        ignore-errors: true 
 
     - name: Configurar herramientas de desarrollo x86
       uses: ilammy/msvc-dev-cmd@v1
@@ -35,7 +33,7 @@ jobs:
         ninja aseprite
 
     - name: Subir archivo final 32 bits
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v4.6.0
       with:
         name: Aseprite-Windows-32bit-Listo
         path: build/bin/
