@@ -1,0 +1,40 @@
+name: Compilar Aseprite para Windows 32 bits
+on: [workflow_dispatch]
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+    - name: Descargar codigo fuente
+      uses: actions/checkout@v4
+      with:
+        submodules: 'recursive'
+
+    # Se configura explícitamente para compilar en arquitectura x86 (32 bits)
+    - name: Configurar herramientas de desarrollo x86
+      uses: ilammy/msvc-dev-cmd@v1
+      with:
+        arch: x86
+
+    - name: Instalar Ninja y CMake
+      run: choco install ninja cmake
+
+    # Descarga la versión de Skia para 32 bits (Windows-Release-x86)
+    - name: Descargar precompilado de Skia 32 bits
+      run: |
+        curl -L -o skia.zip https://github.com
+        expand-archive skia.zip -DestinationPath c:\skia
+
+    # Compila apuntando a las carpetas x86 de Skia
+    - name: Compilar Aseprite x86
+      run: |
+        mkdir build
+        cd build
+        cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo -DLAF_BACKEND=skia -DSKIA_DIR=c:\skia -DSKIA_LIBRARY_DIR=c:\skia\out\Release-x86 -G Ninja ..
+        ninja aseprite
+
+    - name: Subir archivo final 32 bits
+      uses: actions/upload-artifact@v4
+      with:
+        name: Aseprite-Windows-32bit-Listo
+        path: build/bin/
