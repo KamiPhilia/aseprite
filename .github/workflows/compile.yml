@@ -5,9 +5,9 @@ jobs:
   build:
     runs-on: windows-latest
     steps:
-    # SE QUITÓ 'submodules: recursive' PARA EVITAR EL FALLO DE DESCARGA
-    - name: Descargar codigo fuente
-      uses: actions/checkout@v4.2.2
+    # CORRECCIÓN DEFINITIVA: Clonación manual para saltarnos el limpiador de GitHub
+    - name: Descargar codigo fuente manualmente
+      run: git clone https://github.com/aseprite/aseprite.git .
 
     - name: Configurar herramientas de desarrollo x86
       uses: ilammy/msvc-dev-cmd@v1
@@ -30,7 +30,7 @@ jobs:
         ninja aseprite
 
     - name: Subir archivo final 32 bits
-      uses: actions/upload-artifact@v4.6.0
+      uses: actions/upload-artifact@v4
       with:
         name: Aseprite-Windows-32bit-Listo
         path: build/bin/
