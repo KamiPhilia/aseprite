@@ -10,7 +10,6 @@ jobs:
       with:
         submodules: 'recursive'
 
-    # Corrección: Se fuerza la versión compatible de MSVC
     - name: Configurar herramientas de desarrollo x86
       uses: ilammy/msvc-dev-cmd@v1.13.0
       with:
@@ -28,10 +27,9 @@ jobs:
       run: |
         mkdir build
         cd build
-        cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo -DLAF_BACKEND=skia -DSKIA_DIR=c:\skia -DSKIA_LIBRARY_DIR=c:\skia\out\Release-x86 -G Ninja ..
+        cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo -A Win32 -DLAF_BACKEND=skia -DSKIA_DIR=c:\skia -DSKIA_LIBRARY_DIR=c:\skia\out\Release-x86 -G Ninja ..
         ninja aseprite
 
-    # Corrección: Versión actualizada del cargador de archivos
     - name: Subir archivo final 32 bits
       uses: actions/upload-artifact@v4.6.0
       with:
