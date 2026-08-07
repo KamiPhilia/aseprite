@@ -5,12 +5,9 @@ jobs:
   build:
     runs-on: windows-latest
     steps:
+    # SE QUITÓ 'submodules: recursive' PARA EVITAR EL FALLO DE DESCARGA
     - name: Descargar codigo fuente
       uses: actions/checkout@v4.2.2
-      with:
-        submodules: 'recursive'
-        # Evita que errores menores de sincronización en submódulos rompan el script
-        ignore-errors: true 
 
     - name: Configurar herramientas de desarrollo x86
       uses: ilammy/msvc-dev-cmd@v1
