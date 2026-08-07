@@ -5,13 +5,15 @@ jobs:
   build:
     runs-on: windows-latest
     steps:
+    # Corrección: Se actualiza a la versión v4.2.2 compatible con Node 24
     - name: Descargar codigo fuente
-      uses: actions/checkout@v4
+      uses: actions/checkout@v4.2.2
       with:
         submodules: 'recursive'
 
+    # Corrección: Se actualiza a la versión v1.14.1 compatible con Node 24
     - name: Configurar herramientas de desarrollo x86
-      uses: ilammy/msvc-dev-cmd@v1.13.0
+      uses: ilammy/msvc-dev-cmd@v1.14.1
       with:
         arch: x86
 
@@ -20,7 +22,8 @@ jobs:
 
     - name: Descargar precompilado de Skia 32 bits
       run: |
-        curl -L -o skia.zip https://github.com
+        curl -L -o skia.zip https://github.com/aseprite/skia/releases/download/m102-861e4743af/Skia-Windows-Release-x86.zip
+
         expand-archive skia.zip -DestinationPath c:\skia
 
     - name: Compilar Aseprite x86
